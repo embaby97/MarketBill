@@ -1,12 +1,11 @@
-
-
 <?php
-
+require_once  '../Model/Items.php';
 
 function countShose($listItem)
 {
 	$disTotal=0.0;
-	$shoesPrice = 24.99;
+	$obj = new Items();
+	$shoesPrice = $obj->getItemPrice ("Shoes");
 	$discountPercentage = .10;
 	$count = numberOfShoes($listItem);
 	$disTotal += $count *  $shoesPrice * $discountPercentage;
@@ -19,7 +18,8 @@ function jacketDisc ($listItem)
 {
 	$timesOfDisc = numberOfDixcountedJackets($listItem);
 	$countJacketItems = numberOfJackets($listItem);
-	$jacketPrice = 19.99;
+	$obj = new Items();
+	$jacketPrice =$obj->getItemPrice ("Jacket");
 	$discountPercentage = .50;
 	if ($countJacketItems == 0)
 	{

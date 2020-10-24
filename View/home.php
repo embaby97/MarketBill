@@ -19,18 +19,20 @@ if(isset($_POST['stmt'])) {
  {
 	$cart = new Parsser($s);
 		echo "<br>";
+	$obj = new Bill();
 
 	$array = $cart->Parsser($s);
+
 	if ($array[0] == "createCart")
 	{
 		$currancy = $cart->setCurrancy($array);
 
 		$items = $cart->setItemList($array);
-		$subtotal = Subtotal($items);
-		$tax = Tax ($subtotal);
+		$subtotal = $obj->Subtotal($items);
+		$tax = $obj->Tax ($subtotal);
 		$shoseDiscount = countShose($items);
 		$jacketDiscount = jacketDisc ($items);
-		$total = Total ($subtotal , $tax , $shoseDiscount , $jacketDiscount);
+		$total = $obj->Total ($subtotal , $tax , $shoseDiscount , $jacketDiscount);
 		echo $currancy;
 
 		if ($currancy == "EGP")

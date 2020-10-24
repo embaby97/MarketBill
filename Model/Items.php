@@ -1,46 +1,58 @@
 <?php
+class Items{
+    public $list = array( );
+   private $servername = "localhost";
+   private $username = "root";
+   private $password = "";
+   private $DbName = "items";
 
-function itemList()
-{
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $DbName = "items";
+   public function Items()
+    {
 
-    // Create connection
-    $conn = new mysqli($servername, $username, $password , $DbName);
+        // Create connection
+        $conn = new mysqli($this->servername, $this->username, $this->password , $this->DbName);
 
-    // Check connection
-    if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
+        // Check connection
+        if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+        }
+        //echo "Connected successfully";
+
+
+        $sql = "SELECT * FROM items";
+        $result = $conn->query($sql);
+    
+        if ($result->num_rows > 0) {
+          
+            while($u = $result->fetch_assoc())
+            {
+            $this->list[] = array(
+                'ID' => $u['ID'],
+                'ItemName' => $u['ItemName'],
+                'ItemPrice' => $u['ItemPrice']
+                  );
+            }
+        }        
     }
-    //echo "Connected successfully";
 
-
-    $sql = "SELECT * FROM items";
-    $result = $conn->query($sql);
-    $data[$result->num_rows+1]=array(
-        
-        "name" => "",
-        "price" => "",
-        );;
-    echo "<pre>";
-    $count =0;
-    if ($result->num_rows > 0) {
-      // output data of each row
-      while($row = $result->fetch_assoc()) {
-        echo "id: " . $row["ID"]. " - Name: " . $row["ItemName"]. " " . $row["ItemPrice"]. "<br>";
-        $data[$count] =[
-        $row["ItemName"],
-        $row["ItemPrice"]
-        ];
-        $count++;
-      }
-    } else {
-      echo "0 results";
+    public function get_list ()
+    { 
+        return $this->list;
     }
-    return $data;
+
+    public function getItem($itemName)
+    {
+       $found_key = array_search($itemName, array_column($this->list, 'ItemName'));
+        return $this->list[$found_key];
+    }
+    public function getItemPrice ($itemName)
+    {
+        $item =$this-> getItem ($itemName);
+		$iPrice =  array_slice($item, 2);
+		extract($iPrice);
+        return $ItemPrice;
+    }
+    
 }
-
 
 ?>
